@@ -31,7 +31,6 @@ const TIER1_FEATURES: Feature[] = [
   { icon: BookOpen,        label: 'DE case study creation workflow' },
   { icon: FlaskConical,    label: 'Design system validation template' },
   { icon: Bot,             label: 'Case study AI Agent' },
-  { icon: Users,           label: 'Community access' },
 ]
 
 const TIER2_EXTRAS: Feature[] = [
@@ -303,7 +302,7 @@ export function Pricing() {
                         style={{ width: `${100 - pctRemaining}%`, boxShadow: '0 0 24px rgba(253, 126, 53, 0.4)' }}
                       />
                     </div>
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-black tabular-nums text-white/60">
+                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-black tabular-nums text-white">
                       {100 - pctRemaining}%
                     </span>
                   </div>
@@ -463,8 +462,8 @@ export function Pricing() {
                 {/* CTA */}
                 <div className="mt-10">
                   <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs font-black uppercase tracking-widest text-[#FD7E35]">
-                    <Clock className="h-3 w-3" />
-                    Launching March 2nd
+                    <Flame className="h-3 w-3" />
+                    Instant Access
                   </p>
                   {tier.isDark ? (
                     <Button
