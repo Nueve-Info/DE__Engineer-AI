@@ -34,3 +34,11 @@ inspo
 # Offers
 ./offers
 offers
+
+# AI tools
+.agent/
+.agents/
+.augment/
+.claude/
+skills/
+skills-lock.json
