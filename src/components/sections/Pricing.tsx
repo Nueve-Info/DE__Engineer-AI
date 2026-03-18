@@ -11,7 +11,7 @@ import {
   Flame, Clock, Star, Lock, ShieldCheck,
   Video, Code2, ClipboardCheck, BookOpen, FlaskConical, Bot, Users,
   MessageCircle, Users2, Map as MapIcon, LayoutGrid, Briefcase,
-  GraduationCap, Monitor, Plus,
+  Plus,
 } from 'lucide-react'
 
 // ─── Feature type ──────────────────────────────────────────────────────────────
