@@ -27,14 +27,30 @@ const ALLOWED_ORIGINS = [
 
 /* ── Known Price IDs ──
  *
- *  STRIPE_PRICE_TIER1 → Tier 1 "Do It Yourself" ($37)
- *  STRIPE_PRICE_TIER2 → Tier 2 "Mentor Support" ($57)
+ *  STRIPE_PRICE_TIER1     → Tier 1 one-time ($37)
+ *  STRIPE_PRICE_TIER2     → Tier 2 one-time ($57)
+ *  STRIPE_PRICE_TIER1_SUB → Tier 1 subscription ($9/mo)
+ *  STRIPE_PRICE_TIER2_SUB → Tier 2 subscription ($399/mo)
  */
 const KNOWN_PRICE_IDS = new Set(
   [
     process.env.STRIPE_PRICE_TIER1,
     process.env.STRIPE_PRICE_TIER2,
-  ].filter(Boolean)
+    process.env.STRIPE_PRICE_TIER1_SUB,
+    process.env.STRIPE_PRICE_TIER2_SUB,
+  ]
+    .map((v) => v?.trim())
+    .filter(Boolean)
+)
+
+/* Subscription price IDs — these use mode:"subscription" + 3-day trial */
+const SUBSCRIPTION_PRICE_IDS = new Set(
+  [
+    process.env.STRIPE_PRICE_TIER1_SUB,
+    process.env.STRIPE_PRICE_TIER2_SUB,
+  ]
+    .map((v) => v?.trim())
+    .filter(Boolean)
 )
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -51,15 +67,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   /* ── Input validation ── */
   const body = req.body as Record<string, unknown>
-  const priceId = body.priceId
+  const priceId = typeof body.priceId === "string" ? body.priceId.trim() : ""
 
-  if (typeof priceId !== "string" || !priceId.startsWith("price_")) {
+  if (!priceId.startsWith("price_")) {
     return res.status(400).json({ error: "Invalid priceId" })
   }
 
   if (KNOWN_PRICE_IDS.size > 0 && !KNOWN_PRICE_IDS.has(priceId)) {
     return res.status(400).json({ error: "Unknown priceId" })
   }
+
+  const isSubscription = SUBSCRIPTION_PRICE_IDS.has(priceId)
 
   const siteUrl = process.env.SITE_URL ?? "http://localhost:5173"
   const returnUrl = `${siteUrl}/thank-you?session_id={CHECKOUT_SESSION_ID}`
@@ -68,7 +86,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const stripe = getStripe()
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
-      mode: "payment",
+      mode: isSubscription ? "subscription" : "payment",
       line_items: [{ price: priceId, quantity: 1 }],
       return_url: returnUrl,
       custom_fields: [
@@ -82,6 +100,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       consent_collection: {
         terms_of_service: "required",
       },
+      ...(isSubscription
+        ? {
+            subscription_data: {
+              trial_period_days: 3,
+              metadata: {
+                ab_experiment: typeof body.ab_experiment === "string" ? body.ab_experiment : "none",
+                ab_variant: typeof body.ab_variant === "string" ? body.ab_variant : "control",
+                funnel_id: typeof body.funnel_id === "string" ? body.funnel_id : "unknown",
+                landing_url: typeof body.landing_url === "string" ? body.landing_url : "unknown",
+              },
+            },
+          }
+        : {}),
       metadata: {
         ab_experiment: typeof body.ab_experiment === "string" ? body.ab_experiment : "none",
         ab_variant: typeof body.ab_variant === "string" ? body.ab_variant : "control",

@@ -11,7 +11,7 @@ import {
   Flame, Clock, Star, Lock, ShieldCheck,
   Video, Code2, ClipboardCheck, BookOpen, FlaskConical, Bot, Users,
   MessageCircle, Users2, Map as MapIcon, LayoutGrid, Briefcase,
-  GraduationCap, Monitor, Plus,
+  Plus,
 } from 'lucide-react'
 
 // ─── Feature type ──────────────────────────────────────────────────────────────
@@ -39,11 +39,6 @@ const TIER2_EXTRAS: Feature[] = [
   { icon: MapIcon,       label: 'Personalised DE career roadmap' },
   { icon: LayoutGrid,    label: '3 months free Grid access (job outreach tool)' },
   { icon: Briefcase,     label: 'Curated DE job opportunities board' },
-]
-
-const TIER3_EXTRAS: Feature[] = [
-  { icon: GraduationCap, label: 'Full 1:1 mentoring program (weekly sessions)' },
-  { icon: Monitor,       label: '1 month free Claude Code access' },
 ]
 
 // ─── Tier definitions ───────────────────────────────────────────────────────────
@@ -82,27 +77,13 @@ const TIERS: Tier[] = [
     name: 'Mentor Support - Nueve Sub',
     price: 399,
     tagline: 'Mentor accountability to complete your career shift.',
-    badge: '\uD83D\uDD25 MOST POPULAR',
+    badge: null,
     access: 'Nueve Subscription — new course every month',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER2_PRICE_ID ?? '',
     extraFeatures: TIER2_EXTRAS,
     inheritLabel: 'Everything in Do It Yourself - Nueve Sub, plus:',
     inheritNote: '+ all Do It Yourself - Nueve Sub features included',
     isDark: false,
-    isPopular: true,
-  },
-  {
-    id: 3,
-    name: 'Advanced Mentorship',
-    price: 1489,
-    tagline: 'Intensive 1:1 mentoring for committed career changers.',
-    badge: null,
-    access: 'Lifetime access + future updates',
-    priceId: import.meta.env.VITE_STRIPE_DE_TIER3_PRICE_ID ?? '',
-    extraFeatures: TIER3_EXTRAS,
-    inheritLabel: 'Everything in Mentor Support - Nueve Sub, plus:',
-    inheritNote: '+ all Mentor Support - Nueve Sub features included',
-    isDark: true,
     isPopular: false,
   },
 ]
@@ -315,7 +296,7 @@ export function Pricing() {
         )}
 
         {/* ── 3-card grid ── */}
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6 items-stretch">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 md:grid-cols-2 md:max-w-4xl lg:gap-6 items-stretch">
           {TIERS.map((tier, index) => (
             <div
               key={tier.name}
@@ -488,7 +469,7 @@ export function Pricing() {
                       }`}
                       onClick={() => handleTierClick(tier)}
                     >
-                      <span>Enroll Now</span>
+                      <span>{tier.id === 1 ? 'Start Free Trial' : 'Enroll Now'}</span>
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   )}

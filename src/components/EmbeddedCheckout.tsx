@@ -40,7 +40,7 @@ const STEPS: Step[] = [
   },
   {
     icon: MonitorPlay,
-    title: 'Start the Design Engineer course',
+    title: 'Start your first course',
     description: 'Instant access to the full course on the Nueve platform',
   },
   {
@@ -177,7 +177,7 @@ export function CheckoutModal({
                 <ul className="mt-2 space-y-1.5 lg:mt-3 lg:space-y-2">
                   <li className="flex items-center gap-2 text-[11px] text-gray-600 lg:text-sm">
                     <CalendarCheck className="h-3 w-3 shrink-0 text-[#FD7E35]/50 lg:h-4 lg:w-4" />
-                    <span>New course launching mid-April</span>
+                    <span>C.R.A.F.T. launching mid-April</span>
                   </li>
                   <li className="flex items-center gap-2 text-[11px] text-gray-600 lg:text-sm">
                     <CalendarCheck className="h-3 w-3 shrink-0 text-[#FD7E35]/50 lg:h-4 lg:w-4" />
