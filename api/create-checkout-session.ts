@@ -43,12 +43,19 @@ const KNOWN_PRICE_IDS = new Set(
     .filter(Boolean)
 )
 
-/* Subscription price IDs — these use mode:"subscription" + 3-day trial */
+/* Subscription price IDs — these use mode:"subscription" */
 const SUBSCRIPTION_PRICE_IDS = new Set(
   [
     process.env.STRIPE_PRICE_TIER1_SUB,
     process.env.STRIPE_PRICE_TIER2_SUB,
   ]
+    .map((v) => v?.trim())
+    .filter(Boolean)
+)
+
+/* Only tier 1 sub gets a 3-day free trial */
+const TRIAL_PRICE_IDS = new Set(
+  [process.env.STRIPE_PRICE_TIER1_SUB]
     .map((v) => v?.trim())
     .filter(Boolean)
 )
@@ -103,7 +110,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ...(isSubscription
         ? {
             subscription_data: {
-              trial_period_days: 3,
+              ...(TRIAL_PRICE_IDS.has(priceId) ? { trial_period_days: 3 } : {}),
               metadata: {
                 ab_experiment: typeof body.ab_experiment === "string" ? body.ab_experiment : "none",
                 ab_variant: typeof body.ab_variant === "string" ? body.ab_variant : "control",
