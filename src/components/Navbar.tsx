@@ -10,7 +10,7 @@ interface NavbarProps {
 export function Navbar({ priceOverride, isTimerActive = false }: NavbarProps) {
   const location = useLocation()
   const isOfferPage = ['/p', '/b', '/l', '/a', '/j', '/i'].includes(location.pathname)
-  const price = isOfferPage ? '$1' : (priceOverride ?? '$17')
+  const price = isOfferPage ? '$1' : (priceOverride ?? '$9/mo')
 
   const scrollToPricing = () => {
     const pricingSection = document.getElementById('pricing')

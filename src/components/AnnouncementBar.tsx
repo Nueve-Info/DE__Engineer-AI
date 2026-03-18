@@ -16,6 +16,9 @@ function TimeBox({ value, label }: { value: number; label: string }) {
 }
 
 export function AnnouncementBar() {
+  // Countdown hidden for now
+  return null
+
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
 
   if (isExpired) return null

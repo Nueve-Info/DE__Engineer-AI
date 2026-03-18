@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { Container } from '../ui/Container'
-import { Button } from '../ui/Button'
 import accentLogo from '../../assets/accent.png'
 import behaLogo from '../../assets/beha.png'
 import comarLogo from '../../assets/comar.png'
@@ -20,17 +19,7 @@ const logos = [
   { src: samsungLogo, alt: 'Samsung' },
 ]
 
-interface HeroProps {
-  priceLabel?: string
-}
-
-export function Hero({ priceLabel = '$17' }: HeroProps) {
-  const scrollToPricing = () => {
-    const pricingSection = document.getElementById('pricing')
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+export function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col justify-center pt-32 sm:pt-36 pb-32 overflow-hidden bg-[var(--color-surface-dark)]">
       
@@ -126,32 +115,8 @@ export function Hero({ priceLabel = '$17' }: HeroProps) {
               </div>
             </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-6"
-            >
-              <Button 
-                type="button"
-                onClick={scrollToPricing}
-                size="lg" 
-                className="bg-[#FD7E35] hover:bg-[#E0601A] text-white border-none rounded-full px-8 font-semibold text-lg shadow-[0_4px_14px_0_rgba(253,126,53,0.39)] hover:shadow-[0_6px_20px_rgba(253,126,53,0.23)] hover:-translate-y-1 transition-all"
-                data-event="cta_click"
-                data-cta-type="start"
-                data-cta-placement="hero"
-                data-price={priceLabel.replace('$', '')}
-              >
-                Start for just {priceLabel}
-              </Button>
-              
-              <div className="flex items-center gap-2 text-[var(--color-text-muted)] text-sm font-medium">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FD7E35]">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                </svg>
-                Early adopter pricing
-              </div>
-            </motion.div>
+
+
           </div>
         </div>
       </Container>
