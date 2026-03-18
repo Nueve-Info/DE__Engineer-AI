@@ -4,7 +4,6 @@ import { Button } from '../ui/Button'
 import { BackgroundGlow } from '../ui/BackgroundGlow'
 import { useCountdown } from '../../hooks/useCountdown'
 import { useSpots } from '../../hooks/useSpots'
-import { usePriceTest } from '../../experiments/priceTest'
 import { CheckoutModal } from '../EmbeddedCheckout'
 import { trackMeta, capturePosthog } from '../../lib/analytics'
 import {
@@ -66,11 +65,11 @@ interface Tier {
 const TIERS: Tier[] = [
   {
     id: 1,
-    name: 'Do It Yourself',
-    price: 37,
-    tagline: 'Ship a live DE portfolio solo — AI agents do the heavy lifting',
+    name: 'Do It Yourself - Nueve Sub',
+    price: 9,
+    tagline: 'Build your portfolio solo — AI does the heavy lifting.',
     badge: null,
-    access: '1 month of course access',
+    access: 'Nueve Subscription — new course every month',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER1_PRICE_ID ?? '',
     extraFeatures: TIER1_FEATURES,
     inheritLabel: null,
@@ -80,15 +79,15 @@ const TIERS: Tier[] = [
   },
   {
     id: 2,
-    name: 'Mentor Support',
-    price: 57,
-    tagline: 'Mentor-guided accountability to land your first Design Engineering role',
+    name: 'Mentor Support - Nueve Sub',
+    price: 399,
+    tagline: 'Mentor accountability to complete your career shift.',
     badge: '\uD83D\uDD25 MOST POPULAR',
-    access: 'Lifetime access + future updates',
+    access: 'Nueve Subscription — new course every month',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER2_PRICE_ID ?? '',
     extraFeatures: TIER2_EXTRAS,
-    inheritLabel: 'Everything in Do It Yourself, plus:',
-    inheritNote: '+ all Do It Yourself features included',
+    inheritLabel: 'Everything in Do It Yourself - Nueve Sub, plus:',
+    inheritNote: '+ all Do It Yourself - Nueve Sub features included',
     isDark: false,
     isPopular: true,
   },
@@ -96,13 +95,13 @@ const TIERS: Tier[] = [
     id: 3,
     name: 'Advanced Mentorship',
     price: 1489,
-    tagline: 'Intensive 1:1 coaching for the most committed career changers',
+    tagline: 'Intensive 1:1 mentoring for committed career changers.',
     badge: null,
     access: 'Lifetime access + future updates',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER3_PRICE_ID ?? '',
     extraFeatures: TIER3_EXTRAS,
-    inheritLabel: 'Everything in Mentor Support, plus:',
-    inheritNote: '+ all Mentor Support features included',
+    inheritLabel: 'Everything in Mentor Support - Nueve Sub, plus:',
+    inheritNote: '+ all Mentor Support - Nueve Sub features included',
     isDark: true,
     isPopular: false,
   },
@@ -110,7 +109,7 @@ const TIERS: Tier[] = [
 
 // ─── Main Pricing section ────────────────────────────────────────────────────────
 export function Pricing() {
-  const { variant } = usePriceTest()
+  const variant = 'control'
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
   const { pctRemaining } = useSpots()
   const [selectedPriceId, setSelectedPriceId] = useState('')
@@ -239,12 +238,12 @@ export function Pricing() {
             Launch Your Design Engineering Career
           </h2>
           <p className="text-[var(--color-text-secondary)] text-base max-w-2xl mx-auto">
-            Three paths to your first DE role — one-time investment, no subscription, no recurring fees.
+            Join the Nueve Subscription — instant access to the Design Engineer course plus a new course every month.
           </p>
         </motion.div>
 
-        {/* ── Countdown strip ── */}
-        {showTimer && (
+        {/* ── Countdown strip (hidden for now) ── */}
+        {false && showTimer && (
           <motion.div
             id="pricing-countdown"
             initial={{ opacity: 0, y: -10 }}
@@ -321,7 +320,7 @@ export function Pricing() {
             <div
               key={tier.name}
               className={`relative ${
-                tier.isPopular ? 'order-first z-10 md:order-none md:scale-[1.04]' : ''
+                tier.isPopular ? 'z-10 md:scale-[1.04]' : ''
               }`}
             >
               {/* Orange glow halo — popular card */}
@@ -376,7 +375,7 @@ export function Pricing() {
                     ${tier.price.toLocaleString()}
                   </span>
                   <p className="mt-1 text-sm font-black text-[#FD7E35]/70">
-                    One-time payment
+                    {tier.id === 3 ? 'One-time payment' : 'per month'}
                   </p>
                 </div>
 

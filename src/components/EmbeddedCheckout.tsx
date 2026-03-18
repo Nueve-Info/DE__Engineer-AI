@@ -7,12 +7,9 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Mail,
-  Users,
   MonitorPlay,
-  CalendarCheck,
-  MessageSquare,
-  Rocket,
   Wand2,
+  CalendarCheck,
   Lock,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -35,7 +32,7 @@ interface Step {
   description: string
 }
 
-const DIY_STEPS: Step[] = [
+const STEPS: Step[] = [
   {
     icon: Mail,
     title: 'Check your inbox',
@@ -43,70 +40,27 @@ const DIY_STEPS: Step[] = [
   },
   {
     icon: MonitorPlay,
-    title: 'Access the course platform',
-    description: 'Week 1 opens on March 2nd',
+    title: 'Start the Design Engineer course',
+    description: 'Instant access to the full course on the Nueve platform',
   },
   {
     icon: Wand2,
-    title: 'Build with AI Agent',
-    description: 'Use the AI agent to generate portfolio content fast',
+    title: 'Build with AI',
+    description: 'Use AI tools to build your portfolio and ship real projects',
   },
   {
     icon: CalendarCheck,
-    title: 'Follow the weekly roadmap',
-    description: 'New module unlocks each week, one section at a time',
-  },
-  {
-    icon: Rocket,
-    title: 'Export & launch',
-    description: 'Publish your portfolio and start getting interviews',
+    title: 'Learn a new AI skill each month',
+    description: 'A new course drops every month as part of your Nueve subscription',
   },
 ]
-
-const MENTOR_STEPS: Step[] = [
-  {
-    icon: Mail,
-    title: 'Check your inbox',
-    description: 'Welcome email with login credentials arrives instantly',
-  },
-  {
-    icon: Users,
-    title: 'Join the community',
-    description: 'Get your invitation to our private group',
-  },
-  {
-    icon: MonitorPlay,
-    title: 'Access the course platform',
-    description: 'Week 1 opens on March 2nd',
-  },
-  {
-    icon: CalendarCheck,
-    title: 'Follow the weekly roadmap',
-    description: 'New module unlocks each week alongside your cohort',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Get mentor feedback',
-    description: 'Submit your work and receive actionable reviews',
-  },
-  {
-    icon: Rocket,
-    title: 'Complete & launch',
-    description: 'Finish your portfolio with confidence, week by week',
-  },
-]
-
-function getStepsForTier(tierName: string): Step[] {
-  if (tierName === 'Mentor Support') return MENTOR_STEPS
-  return DIY_STEPS
-}
 
 /* ── Component ── */
 
 interface CheckoutModalProps {
   isOpen: boolean
   priceId: string
-  tierName: string
+  tierName?: string
   abVariant: string
   onClose: () => void
 }
@@ -114,7 +68,7 @@ interface CheckoutModalProps {
 export function CheckoutModal({
   isOpen,
   priceId,
-  tierName,
+  tierName: _tierName,
   abVariant,
   onClose: _onClose,
 }: CheckoutModalProps) {
@@ -147,7 +101,7 @@ export function CheckoutModal({
     }
   }, [isOpen])
 
-  const steps = getStepsForTier(tierName)
+  const steps = STEPS
 
   return (
     <AnimatePresence>
@@ -176,10 +130,10 @@ export function CheckoutModal({
             {/* ── Action plan panel (left / top) ── */}
             <div className="shrink-0 bg-gradient-to-b from-white to-[#FD7E35]/[0.03] px-5 py-5 sm:px-8 sm:py-6 lg:w-1/2 lg:overflow-y-auto lg:py-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#FD7E35] lg:text-xs">
-                Here's your action plan
+                Nueve Subscription
               </p>
               <h3 className="mt-1.5 text-lg font-black tracking-tight text-black lg:mt-2 lg:text-2xl">
-                What happens after you sign up
+                What happens after you subscribe
               </h3>
 
               <ol className="mt-3 flex flex-col gap-0 lg:mt-10">
@@ -211,6 +165,26 @@ export function CheckoutModal({
                   </li>
                 ))}
               </ol>
+
+              {/* Incoming courses */}
+              <div className="mt-4 rounded-xl border border-[#FD7E35]/15 bg-[#FD7E35]/[0.04] p-3 lg:mt-6 lg:p-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#FD7E35] lg:text-xs">
+                  Incoming courses
+                </p>
+                <p className="mt-1 text-[10px] text-gray-500 lg:text-xs">
+                  Included in your subscription — no extra cost
+                </p>
+                <ul className="mt-2 space-y-1.5 lg:mt-3 lg:space-y-2">
+                  <li className="flex items-center gap-2 text-[11px] text-gray-600 lg:text-sm">
+                    <CalendarCheck className="h-3 w-3 shrink-0 text-[#FD7E35]/50 lg:h-4 lg:w-4" />
+                    <span>New course launching mid-April</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-[11px] text-gray-600 lg:text-sm">
+                    <CalendarCheck className="h-3 w-3 shrink-0 text-[#FD7E35]/50 lg:h-4 lg:w-4" />
+                    <span>New course launching mid-May</span>
+                  </li>
+                </ul>
+              </div>
             </div>
 
             {/* ── Checkout column (right / bottom) ── */}

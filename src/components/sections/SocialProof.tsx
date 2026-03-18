@@ -21,7 +21,7 @@ const testimonials: Testimonial[] = [
     avatarImage: null,
   },
   {
-    quote: "Folio was a game changer for me. It allowed me to showcase my work in a way that was not possible before.",
+    quote: "Nueve was a game changer for me. It allowed me to showcase my work in a way that was not possible before.",
     name: "Monique M.",
     role: "UX Designer",
     avatar: "MO",

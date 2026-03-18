@@ -11,11 +11,11 @@ interface FinalCTAProps {
 }
 
 export function FinalCTA({
-  price = 17,
+  price = 9,
   priceId = '',
   variant = 'control',
 }: FinalCTAProps) {
-  const priceLabel = `$${price}`
+  const priceLabel = `$${price}/mo`
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
 
   const handleCheckout = () => {
@@ -59,7 +59,7 @@ export function FinalCTA({
             onClick={handleCheckout}
             data-event="select_plan"
             data-plan-type="early_adopter"
-            data-billing="one_time"
+            data-billing="subscription"
             data-price={String(price)}
             data-currency="USD"
             data-cta-placement="final_cta"
@@ -94,7 +94,7 @@ export function FinalCTA({
       <CheckoutModal
         isOpen={isCheckoutOpen}
         priceId={priceId}
-        tierName="Do It Yourself"
+        tierName="Do It Yourself - Nueve Sub"
         abVariant={variant}
         onClose={() => setIsCheckoutOpen(false)}
       />
