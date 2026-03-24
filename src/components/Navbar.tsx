@@ -3,19 +3,17 @@ import { useLocation } from 'react-router-dom'
 import { Button } from './ui/Button'
 
 interface NavbarProps {
-  priceOverride?: string
   isTimerActive?: boolean
 }
 
-export function Navbar({ priceOverride, isTimerActive = false }: NavbarProps) {
+export function Navbar({ isTimerActive = false }: NavbarProps) {
   const location = useLocation()
   const isOfferPage = ['/p', '/b', '/l', '/a', '/j', '/i'].includes(location.pathname)
-  const price = isOfferPage ? '$1' : (priceOverride ?? '$9/mo')
 
-  const scrollToPricing = () => {
-    const pricingSection = document.getElementById('pricing')
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' })
+  const scrollToWaitlist = () => {
+    const waitlistSection = document.getElementById('waitlist')
+    if (waitlistSection) {
+      waitlistSection.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -39,15 +37,14 @@ export function Navbar({ priceOverride, isTimerActive = false }: NavbarProps) {
           {/* CTA Button */}
           <Button
             type="button"
-            onClick={scrollToPricing}
+            onClick={isOfferPage ? undefined : scrollToWaitlist}
             size="sm"
             className="bg-[#FD7E35] hover:bg-[#E0601A] text-white border-none rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold shadow-[0_4px_14px_0_rgba(253,126,53,0.39)] hover:shadow-[0_6px_20px_rgba(253,126,53,0.23)] hover:-translate-y-0.5 transition-all"
             data-event="cta_click"
-            data-cta-type="start"
+            data-cta-type="waitlist_apply"
             data-cta-placement="nav"
-            data-price={price.replace('$', '')}
           >
-            Start for {price}
+            Apply Now
           </Button>
         </div>
       </div>

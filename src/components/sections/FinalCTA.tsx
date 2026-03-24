@@ -1,37 +1,18 @@
-import { useState } from 'react'
 import { Container } from '../ui/Container'
-import { Button } from '../ui/Button'
-import { CheckoutModal } from '../EmbeddedCheckout'
 import { trackMeta, capturePosthog } from '../../lib/analytics'
 
-interface FinalCTAProps {
-  price?: number
-  priceId?: string
-  variant?: string
-}
+const TYPEFORM_URL = 'https://syh5xi59tr6.typeform.com/to/FqMZB3vy'
 
-export function FinalCTA({
-  price = 9,
-  priceId = '',
-  variant = 'control',
-}: FinalCTAProps) {
-  const priceLabel = `$${price}/mo`
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-
-  const handleCheckout = () => {
-    trackMeta('InitiateCheckout', {
-      content_name: 'Nueve Design Engineer',
-      value: price,
-      currency: 'USD',
+export function FinalCTA() {
+  const handleApplyClick = () => {
+    trackMeta('Lead', {
+      content_name: 'Design Engineer Waitlist',
+      content_category: 'application',
     })
-    capturePosthog('InitiateCheckout', {
-      label: 'Claim Early Adopter Access',
-      path: window.location.pathname,
-      ab_experiment: 'price-test',
-      ab_variant: variant,
-      price,
+    capturePosthog('WaitlistApply', {
+      funnel_id: 'DE__Engineer-AI',
+      cta_placement: 'final_cta',
     })
-    setIsCheckoutOpen(true)
   }
 
   return (
@@ -51,21 +32,18 @@ export function FinalCTA({
             Join the Design Engineer transformation today. Build your AI-powered portfolio this weekend.
           </p>
 
-          <Button
-            type="button"
-            variant="cta"
-            size="lg"
-            className="js-select-plan mb-8"
-            onClick={handleCheckout}
-            data-event="select_plan"
-            data-plan-type="early_adopter"
-            data-billing="subscription"
-            data-price={String(price)}
-            data-currency="USD"
+          <a
+            href={TYPEFORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleApplyClick}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FD7E35] to-[#FF9B60] px-8 py-4 text-base font-bold text-white shadow-lg shadow-[#FD7E35]/25 transition hover:opacity-90 hover:-translate-y-0.5 mb-8"
+            data-event="cta_click"
+            data-cta-type="waitlist_apply"
             data-cta-placement="final_cta"
           >
-            Claim Early Adopter Access ({priceLabel})
-          </Button>
+            Start Your Application — Free
+          </a>
 
           {/* Trust seals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[var(--color-text-muted)]">
@@ -73,31 +51,23 @@ export function FinalCTA({
               <svg className="w-5 h-5 text-[var(--color-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span>30-Day Money Back</span>
+              <span>No Payment Required</span>
             </div>
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-[var(--color-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span>Stripe Secure Checkout</span>
+              <span>Takes 2 Minutes</span>
             </div>
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-[var(--color-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <span>2,900 Students</span>
+              <span>200+ Students</span>
             </div>
           </div>
         </div>
       </Container>
-
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        priceId={priceId}
-        tierName="Do It Yourself - Nueve Sub"
-        abVariant={variant}
-        onClose={() => setIsCheckoutOpen(false)}
-      />
     </section>
   )
 }
