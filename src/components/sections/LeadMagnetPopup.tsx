@@ -55,7 +55,7 @@ export function LeadMagnetPopup({ isOpen, onClose }: LeadMagnetPopupProps) {
       // silently fail — don't block the UX
     }
 
-    trackMeta("Lead", { content_name: "ebook_state_of_design_2026" })
+    trackMeta("SubmitApplication", { content_name: "ebook_state_of_design_2026" })
     capturePosthog("lead_magnet_submit", {
       email,
       source: "popup",

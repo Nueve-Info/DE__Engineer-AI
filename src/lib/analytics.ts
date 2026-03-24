@@ -11,6 +11,7 @@ type MetaStandardEvent =
   | "InitiateCheckout"
   | "Lead"
   | "Purchase"
+  | "SubmitApplication"
 
 export function trackMeta(
   event: MetaStandardEvent,
