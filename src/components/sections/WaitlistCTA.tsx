@@ -1,69 +1,173 @@
-import { motion } from "framer-motion"
+import { useRef, useState, useEffect, useCallback } from "react"
 import {
-  ArrowRight,
-  Star,
-  Video,
-  Code2,
-  ClipboardCheck,
-  BookOpen,
-  FlaskConical,
-  Bot,
-  Users,
-  MessageCircle,
-  Users2,
-  Lock,
-  Map as MapIcon,
-  LayoutGrid,
-  Briefcase,
-  Clock,
-  Mail,
-  Send,
-} from "lucide-react"
+  motion,
+  useMotionValue,
+  useTransform,
+  useSpring,
+  useScroll,
+  useMotionValueEvent,
+  useMotionTemplate,
+} from "framer-motion"
+import { ArrowRight, Check } from "lucide-react"
 import { Container } from "../ui/Container"
 import { trackMeta, capturePosthog } from "../../lib/analytics"
 
 const TYPEFORM_URL = "https://syh5xi59tr6.typeform.com/to/FqMZB3vy"
 
-/* ── What accepted applicants get (from DE tiers) ── */
-
-const CORE_FEATURES = [
-  { icon: Video, text: "Pre-recorded step-by-step DE portfolio lessons" },
-  { icon: Code2, text: "Live code build-along sessions" },
-  { icon: ClipboardCheck, text: "Portfolio audit checklist (DE roles)" },
-  { icon: BookOpen, text: "DE case study creation workflow" },
-  { icon: FlaskConical, text: "Design system validation template" },
-  { icon: Bot, text: "Case study AI Agent" },
+const BENEFITS = [
+  "Pre-recorded step-by-step DE portfolio lessons",
+  "Live code build-along sessions",
+  "Portfolio audit checklist (DE roles)",
+  "DE case study creation workflow",
+  "Case study AI Agent",
+  "1:1 mentor feedback sessions",
 ]
 
-const MENTOR_PERKS = [
-  { icon: MessageCircle, text: "3 personalised 1:1 mentor feedback sessions" },
-  { icon: Users2, text: "Weekly group accountability check-ins" },
-  { icon: Lock, text: "Private Discord community" },
-  { icon: MapIcon, text: "Personalised DE career roadmap" },
-  { icon: LayoutGrid, text: "3 months free Grid access (job outreach tool)" },
-  { icon: Briefcase, text: "Curated DE job opportunities board" },
-]
+/* ── Tilt card (desktop: mouse, mobile: scroll) ── */
 
-/* ── "What happens next" steps ── */
+function MembershipCard() {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
 
-const NEXT_STEPS = [
-  { icon: Send, label: "Apply", detail: "2-min application" },
-  { icon: Clock, label: "Review", detail: "3–5 day review" },
-  { icon: Mail, label: "Decision", detail: "Accept or feedback" },
-]
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)")
+    setIsDesktop(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+
+  /* Desktop: mouse-based tilt */
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const mouseRotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [16, -16]), {
+    stiffness: 200,
+    damping: 20,
+  })
+  const mouseRotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-16, 16]), {
+    stiffness: 200,
+    damping: 20,
+  })
+
+  /* Mobile: scroll-based tilt — top-left to bottom-right diagonal */
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  })
+  const scrollRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [14, 0, -14])
+  const scrollRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-10, 0, 10])
+
+  /* Sync scroll values into springs for smooth mobile tilt */
+  const smoothScrollRotateX = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 })
+  const smoothScrollRotateY = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 })
+  useMotionValueEvent(scrollRotateX, "change", (v) => {
+    if (!isDesktop) smoothScrollRotateX.set(v)
+  })
+  useMotionValueEvent(scrollRotateY, "change", (v) => {
+    if (!isDesktop) smoothScrollRotateY.set(v)
+  })
+
+  /* Dynamic linear shine — diagonal beam (bottom-left → top-right) */
+  const shineAngle = useMotionValue(135)
+
+  const mouseShinePos = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [70, 30]),
+    { stiffness: 200, damping: 20 }
+  )
+
+  const scrollShinePos = useTransform(scrollYProgress, [0, 0.5, 1], [25, 50, 75])
+  const smoothScrollShinePos = useSpring(useMotionValue(50), { stiffness: 150, damping: 18 })
+  useMotionValueEvent(scrollShinePos, "change", (v) => { if (!isDesktop) smoothScrollShinePos.set(v) })
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDesktop) return
+    const rect = cardRef.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5)
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5)
+  }, [isDesktop, mouseX, mouseY])
+
+  const handleMouseLeave = useCallback(() => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }, [mouseX, mouseY])
+
+  /* Build dynamic shine from motion values */
+  const activeAngle = shineAngle
+  const activePos = isDesktop ? mouseShinePos : smoothScrollShinePos
+
+  return (
+    <div className="flex items-center justify-center" style={{ perspective: 800 }}>
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX: isDesktop ? mouseRotateX : smoothScrollRotateX,
+          rotateY: isDesktop ? mouseRotateY : smoothScrollRotateY,
+          transformStyle: "preserve-3d",
+          boxShadow:
+            "0 20px 40px -10px rgba(253, 126, 53, 0.18), 0 30px 60px -15px rgba(0, 0, 0, 0.4)",
+        }}
+        className="group relative aspect-[1.6/1] w-full max-w-[420px] overflow-hidden rounded-2xl"
+      >
+        {/* Deep, saturated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E0601A] via-[#FD7E35] to-[#D94E00]" />
+
+        {/* Warm texture overlay */}
+        <div
+          className="absolute inset-0 opacity-40 mix-blend-soft-light"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse at 25% 15%, rgba(255,200,120,0.5) 0%, transparent 45%), radial-gradient(ellipse at 75% 70%, rgba(200,60,0,0.4) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(255,140,40,0.3) 0%, transparent 60%)",
+          }}
+        />
+
+        {/* Dynamic linear light beam — sweeps opposite to tilt */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-20"
+          style={{
+            background: useMotionTemplate`linear-gradient(${activeAngle}deg, transparent calc(${activePos}% - 20%), rgba(255,255,255,0.04) calc(${activePos}% - 10%), rgba(255,255,255,0.18) calc(${activePos}% - 2%), rgba(255,255,255,0.25) ${activePos}%, rgba(255,255,255,0.18) calc(${activePos}% + 2%), rgba(255,255,255,0.04) calc(${activePos}% + 10%), transparent calc(${activePos}% + 20%))`,
+          }}
+        />
+
+        {/* Edge gloss — subtle top-left to bottom-right sheen */}
+        <div
+          className="pointer-events-none absolute inset-0 z-20"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 35%, transparent 65%, rgba(0,0,0,0.06) 100%)",
+          }}
+        />
+
+        {/* Card content */}
+        <div className="relative z-30 flex h-full flex-col justify-between p-6 sm:p-8">
+          <div>
+            <p className="text-2xl font-black leading-none tracking-wide text-white sm:text-3xl">
+              DESIGN
+            </p>
+            <p className="-mt-1 text-[1.4rem] font-normal tracking-wider text-white sm:text-[1.7rem]">
+              engineer
+            </p>
+          </div>
+          <div>
+            <p className="text-3xl font-black text-white sm:text-4xl">
+              Early Access
+            </p>
+            <p className="text-sm font-normal tracking-wide text-white">
+              Application-only
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/* ── Main section ── */
 
 export function WaitlistCTA() {
-  const handleApplyClick = () => {
-    trackMeta("Lead", {
-      content_name: "Design Engineer Waitlist",
-      content_category: "Waitlist Application",
-    })
-    capturePosthog("WaitlistApply", {
-      funnel_id: "DE__Engineer-AI",
-      cta_placement: "waitlist_section",
-    })
-  }
-
   return (
     <section
       id="waitlist"
@@ -76,181 +180,73 @@ export function WaitlistCTA() {
       </div>
 
       <Container className="relative z-10 px-5 sm:px-12 lg:px-20">
-        {/* ── Section header ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 text-center"
-        >
-          <span className="inline-block rounded-full border border-[#FD7E35]/30 bg-[#FD7E35]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#FD7E35]">
-            Early Access — Limited Spots
-          </span>
-          <h2 className="mt-5 text-3xl font-black tracking-tighter text-white sm:text-4xl md:text-5xl">
-            Everything Included When{" "}
-            <span className="bg-gradient-to-r from-[#FD7E35] to-[#FF9B60] bg-clip-text text-transparent">
-              You're Accepted
-            </span>
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-base font-medium text-white/50">
-            The Design Engineer course launches soon. We're hand-picking 10
-            builders per week who are serious about making the career shift.
-          </p>
-        </motion.div>
-
-        {/* ── 2-column grid: value left, CTA right ── */}
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-8">
-          {/* LEFT — What you get (3/5 width) */}
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* LEFT — Membership card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 sm:p-8 lg:col-span-3"
+            transition={{ duration: 0.5 }}
           >
-            <p className="text-xs font-black uppercase tracking-widest text-[#FD7E35]">
-              What you get
-            </p>
-            <h3 className="mt-2 text-lg font-bold tracking-tight text-white">
-              Full Design Engineer course access
-            </h3>
+            <MembershipCard />
+          </motion.div>
 
-            <ul className="mt-5 space-y-3">
-              {CORE_FEATURES.map((f, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#FD7E35]/10">
-                    <f.icon className="h-3 w-3 text-[#FD7E35]" />
-                  </div>
-                  <span className="text-sm font-medium leading-snug text-white/70">
-                    {f.text}
+          {/* RIGHT — Copy + CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+          >
+            <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+              Design Engineer{" "}
+              <span className="bg-gradient-to-r from-[#FD7E35] to-[#FF9B60] bg-clip-text text-transparent">
+                Early Access
+              </span>
+            </h2>
+
+            <p className="mt-4 text-base leading-relaxed text-white/50">
+              The Design Engineer course launches soon. We're hand-picking 10
+              builders per week who are serious about making the career shift.
+            </p>
+
+            <ul className="mt-6 space-y-3">
+              {BENEFITS.map((text, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <Check className="h-4 w-4 shrink-0 text-[#FD7E35]" />
+                  <span className="text-sm font-medium text-white/70">
+                    {text}
                   </span>
                 </li>
               ))}
             </ul>
 
-            {/* Mentor perks teaser */}
-            <div className="mt-6 rounded-xl border border-[#FD7E35]/20 bg-[#FD7E35]/[0.06] p-4">
-              <p className="text-xs font-black uppercase tracking-widest text-[#FD7E35]">
-                Top applicants also unlock
-              </p>
-              <ul className="mt-3 space-y-2.5">
-                {MENTOR_PERKS.map((f, i) => (
-                  <li key={i} className="flex items-center gap-2.5">
-                    <f.icon className="h-3.5 w-3.5 shrink-0 text-[#FD7E35]/60" />
-                    <span className="text-sm text-white/50">{f.text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* RIGHT — Application CTA card (2/5 width) */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col rounded-2xl border border-[#FD7E35]/40 bg-white p-6 sm:p-7 lg:col-span-2"
-          >
-            {/* Social proof */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-3.5 w-3.5 fill-[#FD7E35] text-[#FD7E35]"
-                  />
-                ))}
-              </div>
-              <span className="text-xs text-gray-400">|</span>
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-1.5">
-                  {[
-                    { src: "/avatars/alumni-3.png", alt: "Alumni" },
-                    { src: "/avatars/krystian.png", alt: "Alumni" },
-                    { src: "/avatars/monique.png", alt: "Alumni" },
-                  ].map((a, i) => (
-                    <div
-                      key={i}
-                      className="h-5 w-5 overflow-hidden rounded-full border-2 border-white"
-                    >
-                      <img
-                        src={a.src}
-                        alt={a.alt}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <span className="text-xs font-bold text-gray-700">
-                  200+ students
-                </span>
-              </div>
-            </div>
-
-            {/* Card heading */}
-            <h3 className="mt-5 text-xl font-black tracking-tight text-gray-900">
-              Apply for Design Engineer Early Access
-            </h3>
-
-            {/* Scarcity */}
-            <div className="mt-3 flex items-center gap-2 rounded-lg border border-[#FD7E35]/20 bg-[#FD7E35]/[0.06] px-3 py-2">
-              <Users className="h-4 w-4 shrink-0 text-[#FD7E35]" />
-              <span className="text-sm font-bold text-gray-900">
-                Only 10 spots per week
-              </span>
-            </div>
-
-            <p className="mt-3 text-sm leading-relaxed text-gray-400">
-              Every application is reviewed individually — we only accept
-              the strongest candidates. Selected builders get full course access
-              when the Design Engineer program launches.
-            </p>
-
-            {/* CTA button — green gradient */}
             <a
               href={TYPEFORM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleApplyClick}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-500/20 transition hover:opacity-90"
+              onClick={() => {
+                trackMeta("Lead", {
+                  content_name: "Design Engineer Waitlist",
+                  content_category: "Waitlist Application",
+                })
+                capturePosthog("WaitlistApply", {
+                  funnel_id: "DE__Engineer-AI",
+                  cta_placement: "waitlist_section",
+                })
+              }}
+              className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-[#FD7E35] py-3.5 text-sm font-bold text-white shadow-lg shadow-[#FD7E35]/20 transition hover:opacity-90 sm:w-auto sm:px-10"
               data-event="cta_click"
               data-cta-type="waitlist_apply"
               data-cta-placement="waitlist_section"
             >
-              Join Waitlist
+              Join the Waitlist
               <ArrowRight className="h-4 w-4" />
             </a>
 
-            {/* Friction reducers */}
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] text-gray-400">
-              <span>Takes 2 minutes</span>
-              <span className="text-gray-300">·</span>
-              <span>No payment required</span>
-            </div>
-
-            {/* What happens next — 3-step mini flow */}
-            <div className="mt-auto pt-6">
-              <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-gray-300">
-                What happens next
-              </p>
-              <div className="flex items-start gap-2">
-                {NEXT_STEPS.map((step, i) => (
-                  <div key={i} className="flex flex-1 flex-col items-center text-center">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FD7E35]/10">
-                      <step.icon className="h-3.5 w-3.5 text-[#FD7E35]" />
-                    </div>
-                    <p className="mt-1.5 text-xs font-bold text-gray-900">
-                      {step.label}
-                    </p>
-                    <p className="text-[10px] text-gray-400">{step.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <p className="mt-3 text-xs text-white/30">
+              Takes 2 minutes · No payment required
+            </p>
           </motion.div>
         </div>
       </Container>
