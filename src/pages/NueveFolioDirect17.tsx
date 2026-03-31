@@ -59,7 +59,7 @@ export function NueveFolioDirect17() {
       { name: 'Over 12h of video lessons', value: '$125' },
       { name: 'Portfolio checklist', value: '$19' },
       { name: 'AI Career Assistant', value: '$25' },
-      { name: 'Access to Nueve Community', value: '$15' },
+      { name: 'Access to NueveFolio Community', value: '$15' },
       { name: 'Case study template', value: '$19' },
       { name: 'Claude Code guide for designers', value: '$85' },
       { name: '1:1 strategy session during program', value: '$120' }
@@ -244,7 +244,7 @@ export function NueveFolioDirect17() {
               Don’t trust us. <span className="gradient-text">Trust them 👇</span>
             </h2>
             <p className="text-xl text-[var(--color-text-secondary)] text-center mb-12">
-              The first edition of Nueve Folio proved the system works. Here are examples of participants who landed design
+              The first edition of NueveFolio proved the system works. Here are examples of participants who landed design
               roles after completing the program.
             </p>
 
@@ -257,7 +257,7 @@ export function NueveFolioDirect17() {
                   bullets: [
                     'Previously worked in IT technical support',
                     'Started a basic UI course with us in January 2024',
-                    'Joined Nueve Folio a month later',
+                    'Joined NueveFolio a month later',
                     'At the beginning of October the same year, she started working as a UX Designer at an SEO agency in Cracow'
                   ]
                 },
@@ -267,7 +267,7 @@ export function NueveFolioDirect17() {
                   image: slawekImage,
                   bullets: [
                     'Before program, he worked in customer service',
-                    'He joined Nueve Folio starting almost from scratch',
+                    'He joined NueveFolio starting almost from scratch',
                     'He didn’t even finish his portfolio :)',
                     'He managed to find comissions, which eventually led to a product designer position',
                     'He currently works as a Product Designer at Santander Bank'
@@ -331,7 +331,7 @@ export function NueveFolioDirect17() {
               Over <span className="gradient-text">2900</span> happy students.
             </div>
             <p className="text-[var(--color-text-secondary)]">
-              We’ve managed to build a community of satisfied students. See what people like you are saying about Nueve courses.
+              We’ve managed to build a community of satisfied students. See what people like you are saying about NueveFolio courses.
             </p>
           </div>
         </Container>

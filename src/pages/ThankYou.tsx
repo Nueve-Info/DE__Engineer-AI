@@ -21,7 +21,7 @@ const STEPS = [
   {
     icon: MonitorPlay,
     title: 'Start your first course',
-    description: 'Instant access to the full course on the Nueve platform.',
+    description: 'Instant access to the full course on the NueveFolio platform.',
   },
   {
     icon: Wand2,
@@ -31,7 +31,7 @@ const STEPS = [
   {
     icon: CalendarCheck,
     title: 'Learn a new AI skill each month',
-    description: 'A new course drops every month as part of your Nueve subscription.',
+    description: 'A new course drops every month as part of your NueveFolio subscription.',
   },
 ]
 
@@ -42,7 +42,7 @@ export function ThankYou() {
     const sessionId = searchParams.get('session_id')
 
     trackMeta('Purchase', {
-      content_name: 'Nueve Design Engineer',
+      content_name: 'NueveFolio Design Engineer',
       currency: 'USD',
     })
 
@@ -118,7 +118,7 @@ export function ThankYou() {
             transition={{ delay: 0.4 }}
             className="text-xl sm:text-2xl text-[var(--color-text-secondary)] mb-4 font-medium"
           >
-            Your Nueve subscription is now active
+            Your NueveFolio subscription is now active
           </motion.p>
 
           <motion.p

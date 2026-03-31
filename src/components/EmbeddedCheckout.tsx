@@ -41,7 +41,7 @@ const STEPS: Step[] = [
   {
     icon: MonitorPlay,
     title: 'Start your first course',
-    description: 'Instant access to the full course on the Nueve platform',
+    description: 'Instant access to the full course on the NueveFolio platform',
   },
   {
     icon: Wand2,
@@ -51,7 +51,7 @@ const STEPS: Step[] = [
   {
     icon: CalendarCheck,
     title: 'Learn a new AI skill each month',
-    description: 'A new course drops every month as part of your Nueve subscription',
+    description: 'A new course drops every month as part of your NueveFolio subscription',
   },
 ]
 
@@ -130,7 +130,7 @@ export function CheckoutModal({
             {/* ── Action plan panel (left / top) ── */}
             <div className="shrink-0 bg-gradient-to-b from-white to-[#FD7E35]/[0.03] px-5 py-5 sm:px-8 sm:py-6 lg:w-1/2 lg:overflow-y-auto lg:py-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#FD7E35] lg:text-xs">
-                Nueve Subscription
+                NueveFolio Subscription
               </p>
               <h3 className="mt-1.5 text-lg font-black tracking-tight text-black lg:mt-2 lg:text-2xl">
                 What happens after you subscribe

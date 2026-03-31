@@ -21,7 +21,7 @@ const testimonials: Testimonial[] = [
     avatarImage: null,
   },
   {
-    quote: "Nueve was a game changer for me. It allowed me to showcase my work in a way that was not possible before.",
+    quote: "NueveFolio was a game changer for me. It allowed me to showcase my work in a way that was not possible before.",
     name: "Monique M.",
     role: "UX Designer",
     avatar: "MO",
@@ -111,7 +111,7 @@ export function SocialProof() {
               ))}
             </div>
             <div className="text-sm text-[var(--color-text-secondary)]">
-              <span className="font-semibold text-[var(--color-text-primary)]">Over 2,900</span> Nueve alumni
+              <span className="font-semibold text-[var(--color-text-primary)]">Over 2,900</span> NueveFolio alumni
             </div>
           </div>
         </div>

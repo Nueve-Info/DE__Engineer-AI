@@ -30,7 +30,7 @@ export function Navbar({ isTimerActive = false }: NavbarProps) {
           {/* Logo/Brand */}
           <div className="flex items-center">
             <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#FF6600] via-[#FF9933] to-[#FF6600] bg-clip-text text-transparent">
-              Nueve Design Engineer
+              NueveFolio Design Engineer
             </span>
           </div>
 

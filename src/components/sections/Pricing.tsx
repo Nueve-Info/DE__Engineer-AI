@@ -60,11 +60,11 @@ interface Tier {
 const TIERS: Tier[] = [
   {
     id: 1,
-    name: 'Do It Yourself - Nueve Sub',
+    name: 'Do It Yourself - NueveFolio Sub',
     price: 9,
     tagline: 'Build your portfolio solo — AI does the heavy lifting.',
     badge: null,
-    access: 'Nueve Subscription — new course every month',
+    access: 'NueveFolio Subscription — new course every month',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER1_PRICE_ID ?? '',
     extraFeatures: TIER1_FEATURES,
     inheritLabel: null,
@@ -74,15 +74,15 @@ const TIERS: Tier[] = [
   },
   {
     id: 2,
-    name: 'Mentor Support - Nueve Sub',
+    name: 'Mentor Support - NueveFolio Sub',
     price: 399,
     tagline: 'Mentor accountability to complete your career shift.',
     badge: null,
-    access: 'Nueve Subscription — new course every month',
+    access: 'NueveFolio Subscription — new course every month',
     priceId: import.meta.env.VITE_STRIPE_DE_TIER2_PRICE_ID ?? '',
     extraFeatures: TIER2_EXTRAS,
-    inheritLabel: 'Everything in Do It Yourself - Nueve Sub, plus:',
-    inheritNote: '+ all Do It Yourself - Nueve Sub features included',
+    inheritLabel: 'Everything in Do It Yourself - NueveFolio Sub, plus:',
+    inheritNote: '+ all Do It Yourself - NueveFolio Sub features included',
     isDark: false,
     isPopular: false,
   },
@@ -219,7 +219,7 @@ export function Pricing() {
             Launch Your Design Engineering Career
           </h2>
           <p className="text-[var(--color-text-secondary)] text-base max-w-2xl mx-auto">
-            Join the Nueve Subscription — instant access to the Design Engineer course plus a new course every month.
+            Join the NueveFolio Subscription — instant access to the Design Engineer course plus a new course every month.
           </p>
         </motion.div>
 

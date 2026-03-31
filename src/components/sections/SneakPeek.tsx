@@ -32,7 +32,7 @@ export function SneakPeek() {
           </p>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-[var(--color-text-secondary)]">
             You can preview 3 lessons from{' '}
-            <span className="font-bold text-[var(--color-text-primary)]">Nueve Folio 2.0</span>{' '}
+            <span className="font-bold text-[var(--color-text-primary)]">NueveFolio 2.0</span>{' '}
             completely for free.<br />
             Check them out by clicking the button below
           </p>

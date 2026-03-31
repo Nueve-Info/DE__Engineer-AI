@@ -49,7 +49,7 @@ export function Mentors() {
             </h2>
             
             <p className="text-lg text-[var(--color-text-secondary)] mb-8 leading-relaxed">
-              At Nueve, you’ll learn Silicon Valley design techniques from our mentor. He has 10 years of industry experience and has worked with global companies like Vans and Mattel (the makers of Barbie). Thanks to him, you’ll find out which techniques are actually used in practice - and which should stay on campus.
+              At NueveFolio, you’ll learn Silicon Valley design techniques from our mentor. He has 10 years of industry experience and has worked with global companies like Vans and Mattel (the makers of Barbie). Thanks to him, you’ll find out which techniques are actually used in practice - and which should stay on campus.
             </p>
 
             <ul className="space-y-4">

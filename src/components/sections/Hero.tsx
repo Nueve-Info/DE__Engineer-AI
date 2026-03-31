@@ -111,7 +111,7 @@ export function Hero() {
                 ))}
               </div>
               <div className="text-sm text-[var(--color-text-secondary)]">
-                <span className="font-semibold text-[var(--color-text-primary)]">Over 2,900</span> Nueve alumni
+                <span className="font-semibold text-[var(--color-text-primary)]">Over 2,900</span> NueveFolio alumni
               </div>
             </motion.div>
 

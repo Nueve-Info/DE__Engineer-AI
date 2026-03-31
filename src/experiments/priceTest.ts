@@ -1,5 +1,5 @@
 /**
- * Fixed pricing for the Nueve subscription model.
+ * Fixed pricing for the NueveFolio subscription model.
  * No A/B test — all users see the same prices.
  *
  * Tier 1 (Do It Yourself): $9/mo
