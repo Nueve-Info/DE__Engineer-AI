@@ -1,7 +1,7 @@
 import { Container } from '../ui/Container'
 import { trackMeta, capturePosthog } from '../../lib/analytics'
 
-const TYPEFORM_URL = 'https://syh5xi59tr6.typeform.com/to/FqMZB3vy'
+const TYPEFORM_URL = 'https://form.typeform.com/to/FqMZB3vy'
 
 export function FinalCTA() {
   const handleApplyClick = () => {

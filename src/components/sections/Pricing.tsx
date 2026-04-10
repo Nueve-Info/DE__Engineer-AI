@@ -450,7 +450,7 @@ export function Pricing() {
                       variant="outline"
                       size="lg"
                       className="group w-full border-[#FD7E35] text-[#FD7E35] hover:bg-[#FD7E35]/5"
-                      href="https://syh5xi59tr6.typeform.com/to/HtpRsu32"
+                      href="https://form.typeform.com/to/FqMZB3vy"
                       target="_blank"
                       rel="noopener noreferrer"
                     >

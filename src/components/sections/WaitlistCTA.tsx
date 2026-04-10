@@ -12,7 +12,7 @@ import { ArrowRight, Check } from "lucide-react"
 import { Container } from "../ui/Container"
 import { trackMeta, capturePosthog } from "../../lib/analytics"
 
-const TYPEFORM_URL = "https://syh5xi59tr6.typeform.com/to/FqMZB3vy"
+const TYPEFORM_URL = "https://form.typeform.com/to/FqMZB3vy"
 
 const BENEFITS = [
   "Pre-recorded step-by-step DE portfolio lessons",
